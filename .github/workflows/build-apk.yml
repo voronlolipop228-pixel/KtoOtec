@@ -22,10 +22,16 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Locate Android SDK
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          find "$ANDROID_HOME" -name sdkmanager -type f
+          SDKMANAGER=$(find "$ANDROID_HOME" -name sdkmanager -type f | head -n 1)
+          echo "$(dirname "$SDKMANAGER")" >> "$GITHUB_PATH"
+
       - name: Install Android SDK
         run: |
-          sdkmanager --version
-          yes | sdkmanager --licenses
+          sdkmanager --licenses
           sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
       - name: Set up Gradle
